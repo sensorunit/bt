@@ -1,0 +1,23 @@
+#!/bin/bash
+
+sudo modprobe g2d_23 &&
+sudo modprobe snd_hwdep &&
+sudo modprobe snd_usbmidi_lib &&
+sudo modprobe snd_rawmidi &&
+sudo modprobe mali_drm &&
+sudo modprobe disp_ump  &&
+sudo modprobe rtc_sun4i &&
+
+/opt/bt/brcm_patchram_plus -d --patchram /lib/firmware/ap6210/bcm20710a1.hcd --enable_hci --bd_addr 11:22:33:44:55:66 --no2bytes --tosleep 1000 /dev/ttyS1&
+pid=""
+while [ $pid -z ]; do
+    sleep 1 
+    pid=`ps -e | grep brcm_patchram_p | awk '{print $1}'`
+done
+kill $pid
+/opt/bt/brcm_patchram_plus -d --patchram /lib/firmware/ap6210/bcm20710a1.hcd --enable_hci --bd_addr 11:22:33:44:55:66 --no2bytes --tosleep 1000 /dev/ttyS1&
+sleep 20
+
+sudo modprobe hidp
+sudo hidd --server
+sudo hciconfig hci0 up

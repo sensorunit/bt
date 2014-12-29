@@ -1,0 +1,15 @@
+#!/bin/bash
+case "$1" in
+	start)
+		if [ -x /opt/bt/start ]
+		then
+			echo " * Starting bt"
+			/opt/bt/start
+		fi
+		;;
+	*)	
+		echo "Usage $0 start" >&2
+		exit 1
+		;;
+esac
+exit 0
